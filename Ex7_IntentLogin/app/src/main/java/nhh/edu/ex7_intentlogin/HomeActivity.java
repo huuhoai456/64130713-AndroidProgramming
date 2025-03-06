@@ -1,6 +1,12 @@
 package nhh.edu.ex7_intentlogin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +19,23 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        // Lấy Intent về
+        Intent intentTuLogin = getIntent();
+
+        // Lọc ra lấy dữ liệu chuỗi
+        String tenDN_NhanDuoc = intentTuLogin.getStringExtra("ten_dang_nhap"); // Xóa "name: "
+
+        // Gán vào điều khiển
+        TextView tvTenDN = (TextView) findViewById(R.id.tvUserName);
+
+        // Thêm kiểm tra null để tránh crash nếu không nhận được dữ liệu
+        if (tenDN_NhanDuoc != null) {
+            tvTenDN.setText(tenDN_NhanDuoc);
+        } else {
+            tvTenDN.setText("Không nhận được tên đăng nhập");
+            Toast.makeText(this, "Không nhận được dữ liệu từ Login", Toast.LENGTH_SHORT).show();
+        }
     }
 }
