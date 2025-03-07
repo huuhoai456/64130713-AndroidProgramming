@@ -12,9 +12,9 @@ Ex5_ActivityAsListener
 
 Ex6_IntentDonGian
 ![image](https://github.com/user-attachments/assets/de146246-e77c-4505-a957-32ddddcd1342)
-![image](https://github.com/user-attachments/assets/795df6cf-8706-44d6-ae94-308c74738518)
-![image](https://github.com/user-attachments/assets/d75f4df8-b1a1-468e-894a-a110c806609e)
+![image](https://github.com/user-attachments/assets/795df6cf-8706-44d6-ae94-308c74738518)![image](https://github.com/user-attachments/assets/d75f4df8-b1a1-468e-894a-a110c806609e)
 
+Ex7_IntentLogin
 
 
 
