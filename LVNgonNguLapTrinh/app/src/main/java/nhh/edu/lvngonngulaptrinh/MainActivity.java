@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         );
         //B3 Gan Adapter
         listViewNNLT.setAdapter(adapterNNLT);
+        
         //B4 Gan bo lang nghe va xu ly su kien
         listViewNNLT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
