@@ -16,8 +16,6 @@
         android:ems="10"
         android:hint="So A"
         android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/PhepTinh"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +24,7 @@
         android:layout_width="63dp"
         android:layout_height="48dp"
         android:layout_marginTop="92dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="28dp"
         android:ems="10"
         android:hint="So B"
         android:inputType="text"
@@ -50,12 +48,14 @@
         android:layout_width="59dp"
         android:layout_height="48dp"
         android:layout_marginTop="92dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="52dp"
         android:ems="10"
         android:hint="+"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/SoB"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/SoA"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
