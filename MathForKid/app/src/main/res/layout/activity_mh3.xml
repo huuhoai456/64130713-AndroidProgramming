@@ -5,20 +5,20 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MH2">
-
-    <Button
-        android:id="@+id/btnP3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginTop="200dp"
-        android:text="Go P3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".MH3">
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/imageView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="272dp"
+        android:layout_marginTop="140dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_home" />
+
+    <ImageView
+        android:id="@+id/imageView8"
         android:layout_width="409dp"
         android:layout_height="118dp"
         android:layout_marginTop="4dp"
@@ -30,22 +30,25 @@
         app:srcCompat="@drawable/td" />
 
     <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="357dp"
-        android:layout_height="102dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView7"
+        android:id="@+id/imageView9"
+        android:layout_width="323dp"
+        android:layout_height="231dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.841"
-        app:srcCompat="@drawable/p2_h1" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView8"
+        app:layout_constraintVertical_bias="0.839"
+        app:srcCompat="@drawable/p3_h1" />
 
     <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="294dp"
-        android:layout_height="333dp"
+        android:id="@+id/imageView10"
+        android:layout_width="331dp"
+        android:layout_height="101dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/p2_h2" />
+        app:srcCompat="@drawable/p3_h2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
