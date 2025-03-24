@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lvOnTap;
     ArrayList<String> dsOnTap;
     public void TimDieuKhien(){
-        lvOnTap =findViewById(R.id.LVOnTap);
+        lvOnTap = findViewById(R.id.LVOnTap);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         });
         //B1
         dsOnTap = new ArrayList<String>();
-        dsOnTap.add("ghj");
-        dsOnTap.add("dsaf");
-        dsOnTap.add("hadjh");
+        dsOnTap.add("hajfd");
+        dsOnTap.add("hkjaks");
+        dsOnTap.add("sdhhaksa");
         //B2
         ArrayAdapter<String> adapterOnTap;
         adapterOnTap = new ArrayAdapter<>(
