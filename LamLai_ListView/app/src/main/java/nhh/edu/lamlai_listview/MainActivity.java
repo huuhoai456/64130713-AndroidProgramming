@@ -16,10 +16,10 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ListView lvontap;
+    ListView lvOnTap;
     ArrayList<String> dsOnTap;
     public void TimDieuKhien(){
-        lvontap = findViewById(R.id.LVOnTap);
+        lvOnTap =findViewById(R.id.LVOnTap);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +34,22 @@ public class MainActivity extends AppCompatActivity {
         });
         //B1
         dsOnTap = new ArrayList<String>();
-        dsOnTap.add("LTTBDD");
-        dsOnTap.add("Linux");
-        dsOnTap.add("TRR");
+        dsOnTap.add("ghj");
+        dsOnTap.add("dsaf");
+        dsOnTap.add("hadjh");
         //B2
-        ArrayAdapter<String> adpterOnTap;
-        adpterOnTap = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapterOnTap;
+        adapterOnTap = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1,dsOnTap
         );
         //B3
-        lvontap.setAdapter(adpterOnTap);
+        lvOnTap.setAdapter(adapterOnTap);
         //B4
-        lvontap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvOnTap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String giatrduocchon = dsOnTap.get(position);
-                Toast.makeText(MainActivity.this,giatrduocchon,Toast.LENGTH_SHORT).show();
+                String gtdc = dsOnTap.get(position);
+                Toast.makeText(MainActivity.this,gtdc,Toast.LENGTH_SHORT).show();
             }
         });
     }
