@@ -1,10 +1,13 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.TaiKhoan;
 
 public class databasedoctruyen extends SQLiteOpenHelper {
 
@@ -219,5 +222,19 @@ public class databasedoctruyen extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    //Phương thức lấy tất cả các tài khoản
+    public Cursor getData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM "+TABLE_TAIKHOAN,null);
+        return res;
+    }
+    //Phương thức add tài khoản vào database
+    public void AddTaiKhoan(TaiKhoan taiKhoan){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Thực hiện insert thông qua ContentValues
+        
     }
 }
