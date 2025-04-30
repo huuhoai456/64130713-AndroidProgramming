@@ -1,7 +1,9 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -235,6 +237,16 @@ public class databasedoctruyen extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Thực hiện insert thông qua ContentValues
-        
+        ContentValues values = new ContentValues();
+        values.put(TEN_TAI_KHOAN,taiKhoan.getmTenTaiKhoan());
+        values.put(MAT_KHAU,taiKhoan.getmMatkhau());
+        values.put(EMAIL,taiKhoan.getmEmail());
+        values.put(PHAN_QUYEN,taiKhoan.getmPhanQuyen());
+
+        db.insert(TABLE_TAIKHOAN,null,values);
+
+        //Đóng lại khi không dùng
+        db.close();;
+        Log.e("ADD TK", "TC");
     }
 }
