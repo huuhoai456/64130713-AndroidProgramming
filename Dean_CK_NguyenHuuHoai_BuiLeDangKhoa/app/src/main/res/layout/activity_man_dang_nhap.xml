@@ -28,14 +28,16 @@
         android:minHeight="48dp" />
 
     <EditText
-        android:drawableRight="@drawable/ic_matkhau"
+        android:inputType="textPassword"
         android:id="@+id/matkhau"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:drawableRight="@drawable/ic_matkhau"
         android:hint="Mật khẩu"
         android:minHeight="48dp" />
+
     <Button
         android:id="@+id/dangnhap"
         android:layout_marginTop="20dp"
