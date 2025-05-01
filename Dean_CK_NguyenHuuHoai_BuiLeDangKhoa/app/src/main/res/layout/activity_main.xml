@@ -17,15 +17,22 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.Toolbar
+                android:background="#FFFFFF"
+                app:titleTextColor="#000000"
                 android:id="@+id/toolbarmanhinhchinh"
                 app:title="Tủ Truyện"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"></androidx.appcompat.widget.Toolbar>
+                android:layout_height="?attr/actionBarSize">
+
+            </androidx.appcompat.widget.Toolbar>
 
             <ViewFlipper
+                android:background="#FFFFFF"
                 android:id="@+id/viewflipper"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"></ViewFlipper>
+                android:layout_height="150dp">
+
+            </ViewFlipper>
             
             <LinearLayout
                 android:background="#FFFFFF"
@@ -40,12 +47,16 @@
                     android:layout_margin="5dp"
                     android:text="Mới nhất"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></TextView>
+                    android:layout_height="wrap_content">
+
+                </TextView>
                 
                 <ListView
                     android:id="@+id/listviewNew"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
+                    android:layout_height="wrap_content">
+
+                </ListView>
             </LinearLayout>
 
         </LinearLayout>
@@ -58,12 +69,16 @@
             <ListView
                 android:id="@+id/listviewthongtin"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"></ListView>
+                android:layout_height="150dp">
+
+            </ListView>
             <ListView
                 android:id="@+id/listviewmanhinhchinh"
                 android:layout_marginTop="150dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
+                android:layout_height="wrap_content">
+
+            </ListView>
         </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>

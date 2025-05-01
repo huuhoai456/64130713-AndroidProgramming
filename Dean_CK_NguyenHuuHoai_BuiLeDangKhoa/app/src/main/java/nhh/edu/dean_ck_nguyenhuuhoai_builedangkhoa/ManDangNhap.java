@@ -65,7 +65,6 @@ public class ManDangNhap extends AppCompatActivity {
                         intent.putExtra("idd", idd);
                         intent.putExtra("email", email);
                         intent.putExtra("tentaikhoan", tentk);
-
                         startActivity(intent);
                     }
                 }
