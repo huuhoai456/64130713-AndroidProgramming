@@ -1,6 +1,7 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -27,20 +29,53 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.Truyen;
+
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewFlipper viewFlipper;
     NavigationView navigationView;
     ListView listView,listViewNew,listViewThongTin;
     DrawerLayout drawerLayout;
+
+    String email;
+    String tentaikhoan;
+    ArrayList<Truyen> TruyenArraylist;
+
+    nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen adapterTruyen;
+
+    nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen databasedoctruyen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        databasedoctruyen = new databasedoctruyen(this);
+        //Nhận dũ liệu ở màn đăng nhập gửi
+        Intent intentpq = getIntent();
+        int i = intentpq.getIntExtra("phanq",0);
+        int idd = intentpq.getIntExtra("idd",0);
+        email = intentpq.getStringExtra("email");
+        tentaikhoan = intentpq.getStringExtra("tentaikhoan");
+
         AnhXa();
         ActionBar();
         ActionViewFlipper();
+
+        listViewNew.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, ManNoiDung.class);
+
+                String tent = TruyenArraylist.get(position).getTenTruyen();
+                String noidungt = TruyenArraylist.get(position).getNoiDung();
+                intent.putExtra("tentruyen",tent);
+                intent.putExtra("noidung",noidungt);
+                startActivity(intent);
+            }
+        });
     }
     //Thanh actionbar với toolbar
     private void ActionBar() {
@@ -101,6 +136,25 @@ public class MainActivity extends AppCompatActivity {
         listViewThongTin = findViewById(R.id.listviewthongtin);
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerlayout);
+
+        TruyenArraylist = new ArrayList<>();
+
+        Cursor cursor1 = databasedoctruyen.getData1();
+        while (cursor1.moveToNext()){
+
+            int id = cursor1.getInt(0);
+            String tentruyen = cursor1.getString(1);
+            String noidung = cursor1.getString(2);
+            String anh = cursor1.getString(3);
+            int id_tk = cursor1.getInt(4);
+
+            TruyenArraylist.add(new Truyen(id,tentruyen,noidung,anh,id_tk));
+
+            adapterTruyen = new adapterTruyen(getApplicationContext(),TruyenArraylist);
+            listViewNew.setAdapter(adapterTruyen);
+        }
+        cursor1.moveToFirst();
+        cursor1.close();
     }
     //Nạp 1 menu tìm kiếm vào ActionBar
     @Override
