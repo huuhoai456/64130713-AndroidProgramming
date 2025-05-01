@@ -1,16 +1,23 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa;
 
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,8 +39,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AnhXa();
+        ActionBar();
         ActionViewFlipper();
     }
+    //Thanh actionbar với toolbar
+    private void ActionBar() {
+        //Hàm hỗ trợ toolbar
+        setSupportActionBar(toolbar);
+        //set nút cho actionbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Tạo icon cho toolbar
+        toolbar.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
+        //Thêm sự kiện click
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+    }
+
     //Phương thức cho chạy quảng cáo với ViewFlipper
     private void ActionViewFlipper() {
         //mảng chứa tấm ảnh cho quảng cáo
@@ -75,5 +101,21 @@ public class MainActivity extends AppCompatActivity {
         listViewThongTin = findViewById(R.id.listviewthongtin);
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerlayout);
+    }
+    //Nạp 1 menu tìm kiếm vào ActionBar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Nếu click vào icon tìm kiếm thì sẽ chuyển sang màn hình tìm kiếm
+        if (item.getItemId() == R.id.menu1) {
+            Intent intent = new Intent(MainActivity.this, ManTimKiem.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
