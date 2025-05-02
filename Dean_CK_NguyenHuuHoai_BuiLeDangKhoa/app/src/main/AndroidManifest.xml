@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Dean_CK_NguyenHuuHoai_BuiLeDangKhoa"
         tools:targetApi="31">
         <activity
+            android:name=".ManDangBai"
+            android:exported="false" />
+        <activity
             android:name=".ManAdmin"
             android:exported="false" />
         <activity

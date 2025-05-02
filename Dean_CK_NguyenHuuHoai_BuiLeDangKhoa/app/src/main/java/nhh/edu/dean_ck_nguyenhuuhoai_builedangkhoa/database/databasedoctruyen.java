@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.TaiKhoan;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.Truyen;
 
 public class databasedoctruyen extends SQLiteOpenHelper {
 
@@ -264,6 +265,28 @@ public class databasedoctruyen extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor res = db.rawQuery("SELECT * FROM "+TABLE_TRUYEN,null);
+        return res;
+    }
+
+    //Add Truyện
+    public void AddTruyen(Truyen truyen){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TEN_TRUYEN,truyen.getTenTruyen());
+        values.put(NOI_DUNG,truyen.getNoiDung());
+        values.put(IMAGE,truyen.getAnh());
+        values.put(ID_TAI_KHOAN,truyen.getID_TK());
+
+        db.insert(TABLE_TAIKHOAN,null,values);
+        db.close();
+    }
+
+    //delete Truyện
+    public int Delete(int i){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int res = db.delete(TABLE_TRUYEN,ID_TRUYEN+" = "+i,null);
         return res;
     }
 }
