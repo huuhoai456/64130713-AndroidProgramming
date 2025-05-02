@@ -1,5 +1,6 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -56,6 +57,30 @@ public class ManAdmin extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DialogDelete(position);
+
+                return false;
+            }
+        });
+    }
+    //Phương thức Dialog hiển thị cửa sổ xóa
+    private void DialogDelete(int position){
+        //Tạo đối tượng dialog
+        Dialog dialog = new Dialog(this);
+        //Nạp layout vào dialog
+        dialog.setContentView(R.layout.dialogdelete);
+        //Tắt click ra ngoài là đóng, chỉ click no mới đúng
+        dialog.setCanceledOnTouchOutside(false);
+
+        //Ánh xạ
+        Button btnYes = dialog.findViewById(R.id.buttonYes);
+        Button btnNo = dialog.findViewById(R.id.buttonNo);
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
                 int idtruyen = TruyenArrayList.get(position).getID();
                 //Xóa dữ liệu
                 databasedoctruyen.Delete(idtruyen);
@@ -64,9 +89,17 @@ public class ManAdmin extends AppCompatActivity {
                 finish();
                 startActivity(intent);
                 Toast.makeText(ManAdmin.this,"Xóa truyện thành công",Toast.LENGTH_SHORT).show();
-                return false;
             }
         });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //thực hiện đóng dialog
+                dialog.cancel();
+            }
+        });
+        //run dialog
+        dialog.show();
     }
     //Gắn dữ liệu cho listview
     private void initList() {
