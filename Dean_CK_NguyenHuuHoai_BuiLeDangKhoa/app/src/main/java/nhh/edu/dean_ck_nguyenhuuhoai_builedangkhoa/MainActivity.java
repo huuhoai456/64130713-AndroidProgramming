@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +33,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterchuyenmuc;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterthongtin;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.TaiKhoan;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.Truyen;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.chuyenmuc;
 
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -44,9 +51,13 @@ public class MainActivity extends AppCompatActivity {
     String tentaikhoan;
     ArrayList<Truyen> TruyenArraylist;
 
-    nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen adapterTruyen;
+    adapterTruyen adapterTruyen;
+    ArrayList<chuyenmuc> chuyenmucArrayList;
+    ArrayList<TaiKhoan> taiKhoanArrayList;
+    databasedoctruyen databasedoctruyen;
+    adapterchuyenmuc adapterchuyenmuc;
+    adapterthongtin adapterthongtin;
 
-    nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen databasedoctruyen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +85,28 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("tentruyen",tent);
                 intent.putExtra("noidung",noidungt);
                 startActivity(intent);
+            }
+        });
+
+        //Bắt click item cho listview
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0){
+                    if (i == 2){
+
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this,"Bạn không có quyền đăng bài", Toast.LENGTH_SHORT).show();
+                        Log.e("Đăng bài : ","Bạn không có quyền");
+                    }
+                }
+                else if (position == 1){
+
+                }
+                else if (position == 2){
+                    finish();
+                }
             }
         });
     }
@@ -155,6 +188,23 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor1.moveToFirst();
         cursor1.close();
+
+        //Thông tin
+        taiKhoanArrayList = new ArrayList<>();
+        taiKhoanArrayList.add(new TaiKhoan(tentaikhoan,email));
+
+        adapterthongtin = new adapterthongtin(this,R.layout.navigation_thongtin,taiKhoanArrayList);
+        listViewThongTin.setAdapter(adapterthongtin);
+
+        //chuyên mục
+        chuyenmucArrayList = new ArrayList<>();
+        chuyenmucArrayList.add(new chuyenmuc("Đăng bài",R.drawable.ic_baseline_post_add_24dp));
+        chuyenmucArrayList.add(new chuyenmuc("Thông tin",R.drawable.ic_baseline_face_24dp));
+        chuyenmucArrayList.add(new chuyenmuc("Đăng xuất",R.drawable.ic_baseline_login_24dp));
+
+        adapterchuyenmuc = new adapterchuyenmuc(this,R.layout.chuyenmuc,chuyenmucArrayList);
+        listView.setAdapter(adapterchuyenmuc);
+
     }
     //Nạp 1 menu tìm kiếm vào ActionBar
     @Override
