@@ -26,9 +26,9 @@ public class ManAdmin extends AppCompatActivity {
     Button buttonThem;
 
     ArrayList<Truyen> TruyenArrayList;
-    nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen adapterTruyen;
+    adapterTruyen adapterTruyen;
 
-    nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen databasedoctruyen;
+    databasedoctruyen databasedoctruyen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

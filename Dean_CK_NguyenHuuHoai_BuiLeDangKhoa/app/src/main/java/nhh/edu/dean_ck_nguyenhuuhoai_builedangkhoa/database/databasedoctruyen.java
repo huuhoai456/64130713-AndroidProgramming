@@ -278,7 +278,7 @@ public class databasedoctruyen extends SQLiteOpenHelper {
         values.put(IMAGE,truyen.getAnh());
         values.put(ID_TAI_KHOAN,truyen.getID_TK());
 
-        db.insert(TABLE_TAIKHOAN,null,values);
+        db.insert(TABLE_TRUYEN,null,values);
         db.close();
     }
 
