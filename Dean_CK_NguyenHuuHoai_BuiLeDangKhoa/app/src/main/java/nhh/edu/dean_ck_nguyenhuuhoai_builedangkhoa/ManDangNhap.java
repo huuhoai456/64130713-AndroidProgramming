@@ -54,9 +54,9 @@ public class ManDangNhap extends AppCompatActivity {
                     //Nếu tài khoản và mật khẩu người dùng nhập vào khớp với dữ liệu trong database
                     if (datatentaikhoan.equals(tentaikhoan) && datamatkhau.equals(matkhau)) {
                         //Lấy dữ liệu phân quyền và id
-                        int phanquyen = cursor.getInt(cursor.getInt(4));
-                        int idd = cursor.getInt(cursor.getInt(0));
+                        int idd = cursor.getInt(0);
                         String email = cursor.getString(3);
+                        int phanquyen = cursor.getInt(4);
                         String tentk = cursor.getString(1);
                         //Chuyển sang màn hình MainActivity
                         Intent intent = new Intent(ManDangNhap.this, MainActivity.class);

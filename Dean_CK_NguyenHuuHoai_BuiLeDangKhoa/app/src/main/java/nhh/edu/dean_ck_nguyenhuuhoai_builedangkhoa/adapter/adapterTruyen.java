@@ -39,6 +39,11 @@ public class adapterTruyen extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    //filter
+    public void filterList(ArrayList<Truyen> filteredList) {
+        listTruyen = filteredList;
+        notifyDataSetChanged();
+    }
 
     public class ViewHolder{
         TextView txtTenTruyen;

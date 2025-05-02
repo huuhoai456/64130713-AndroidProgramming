@@ -48,9 +48,9 @@ public class databasedoctruyen extends SQLiteOpenHelper {
             +IMAGE+" TEXT, "+ID_TAI_KHOAN+" INTEGER , FOREIGN KEY ( "+ ID_TAI_KHOAN +" ) REFERENCES "+
             TABLE_TAIKHOAN+"("+ID_TAI_KHOAN+"))";
     //Insert dữ liệu vào bảng tài khoản
-    //Phân quyền: 1.admin 2.người dùng
-    private String SQLQuery2 = "INSERT INTO TaiKhoan VAlUES (null,'admin','admin','admin@gmail.com',2)";
-    private String SQLQuery3 = "INSERT INTO TaiKhoan VAlUES (null,'hoai','hoai','hoai@gmail.com',1)";
+    //Phân quyền: 2.admin 1.người dùng
+    private String SQLQuery2 = "INSERT INTO TaiKhoan VALUES (null,'admin','admin','admin@gmail.com',2)";
+    private String SQLQuery3 = "INSERT INTO TaiKhoan VALUES (null,'hoai','hoai','hoai@gmail.com',1)";
     //Insert truyện
     private String SQLQuery4 = "INSERT INTO truyen VALUES (null,'Rùa và Thỏ','Phần 1:\n" +
             "\n" +
