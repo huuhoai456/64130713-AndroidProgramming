@@ -92,18 +92,23 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Đăng bài
                 if (position == 0){
                     if (i == 2){
-
+                        Intent intent = new Intent(MainActivity.this, ManAdmin.class);
+                        startActivity(intent);
                     }
                     else {
                         Toast.makeText(MainActivity.this,"Bạn không có quyền đăng bài", Toast.LENGTH_SHORT).show();
                         Log.e("Đăng bài : ","Bạn không có quyền");
                     }
                 }
+                //Nếu vị trí ấn vào là thông tin thì sẽ chuyển qua màn hình thông tin app
                 else if (position == 1){
-
+                    Intent intent = new Intent(MainActivity.this, ManThongTin.class);
+                    startActivity(intent);
                 }
+                //Đăng xuất
                 else if (position == 2){
                     finish();
                 }
