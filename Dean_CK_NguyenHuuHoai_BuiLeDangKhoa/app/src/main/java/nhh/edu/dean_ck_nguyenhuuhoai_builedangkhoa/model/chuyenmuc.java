@@ -2,32 +2,27 @@ package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model;
 
 public class chuyenmuc {
 
-    private String tenchuyenmuc;
-    private String hinhanhchuyenmuc;
+    private String tenchyenmuc;
+    private int hinhanhchuyenmuc;
 
-    // Constructor không tham số bắt buộc cho Firebase
-    public chuyenmuc() {
-    }
-
-    // Constructor có tham số
-    public chuyenmuc(String tenchuyenmuc, String hinhanhchuyenmuc) {
-        this.tenchuyenmuc = tenchuyenmuc;
+    public chuyenmuc(String tenchyenmuc, int hinhanhchuyenmuc) {
+        this.tenchyenmuc = tenchyenmuc;
         this.hinhanhchuyenmuc = hinhanhchuyenmuc;
     }
 
-    public String getTenchuyenmuc() {
-        return tenchuyenmuc;
+    public String getTenchyenmuc() {
+        return tenchyenmuc;
     }
 
-    public void setTenchuyenmuc(String tenchuyenmuc) {
-        this.tenchuyenmuc = tenchuyenmuc;
+    public void setTenchyenmuc(String tenchyenmuc) {
+        this.tenchyenmuc = tenchyenmuc;
     }
 
-    public String getHinhanhchuyenmuc() {
+    public int getHinhanhchuyenmuc() {
         return hinhanhchuyenmuc;
     }
 
-    public void setHinhanhchuyenmuc(String hinhanhchuyenmuc) {
+    public void setHinhanhchuyenmuc(int hinhanhchuyenmuc) {
         this.hinhanhchuyenmuc = hinhanhchuyenmuc;
     }
 }

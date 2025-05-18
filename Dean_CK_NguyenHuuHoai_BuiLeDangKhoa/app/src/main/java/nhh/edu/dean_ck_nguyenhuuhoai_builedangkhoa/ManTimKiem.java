@@ -1,21 +1,24 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen;
+import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.Truyen;
 
 public class ManTimKiem extends AppCompatActivity {
@@ -26,40 +29,42 @@ public class ManTimKiem extends AppCompatActivity {
     ArrayList<Truyen> arrayList;
     adapterTruyen adapterTruyen;
 
-    FirebaseFirestore db;
+    databasedoctruyen databasedoctruyen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_man_tim_kiem);
 
+
         listView = findViewById(R.id.listviewTimKiem);
         edt = findViewById(R.id.timkiem);
 
-        TruyenArrayList = new ArrayList<>();
-        arrayList = new ArrayList<>();
-        adapterTruyen = new adapterTruyen(getApplicationContext(), TruyenArrayList);
-        listView.setAdapter(adapterTruyen);
+        initList();
 
-        db = FirebaseFirestore.getInstance();
-
-        loadTruyen();
-
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(ManTimKiem.this, ManNoiDung.class);
-            String tent = arrayList.get(position).getTenTruyen();
-            String noidungt = arrayList.get(position).getNoiDung();
-            intent.putExtra("tentruyen", tent);
-            intent.putExtra("noidung", noidungt);
-            startActivity(intent);
+        //Bật click cho item
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ManTimKiem.this,ManNoiDung.class);
+                String tent = arrayList.get(position).getTenTruyen();
+                String noidungt = arrayList.get(position).getNoiDung();
+                intent.putExtra("tentruyen",tent);
+                intent.putExtra("noidung",noidungt);
+                startActivity(intent);
+            }
         });
-
+        //editText search
         edt.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -67,36 +72,53 @@ public class ManTimKiem extends AppCompatActivity {
             }
         });
     }
+    //search
+    private void filter (String text){
 
-    private void loadTruyen() {
-        db.collection("Truyen").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                TruyenArrayList.clear();
-                arrayList.clear();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Truyen truyen = document.toObject(Truyen.class);
-                    truyen.setID(document.getId()); // Nếu bạn dùng ID document làm String
-                    TruyenArrayList.add(truyen);
-                    arrayList.add(truyen);
-                }
-                adapterTruyen.notifyDataSetChanged();
-            } else {
-                Toast.makeText(this, "Không tải được truyện", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void filter(String text) {
+        //Xóa dữ liệu mảng
         arrayList.clear();
 
         ArrayList<Truyen> filteredList = new ArrayList<>();
 
-        for (Truyen item : TruyenArrayList) {
-            if (item.getTenTruyen().toLowerCase().contains(text.toLowerCase())) {
+        for (Truyen item : TruyenArrayList){
+            if ((item.getTenTruyen().toLowerCase().contains(text.toLowerCase()))){
+
+                //Thêm item vào filteredList
                 filteredList.add(item);
+
+                //Thêm vào mảng
                 arrayList.add(item);
             }
         }
         adapterTruyen.filterList(filteredList);
+    }
+
+    //Phương thức lấy dữ liệu, gắn vào listview
+    private void initList() {
+        TruyenArrayList = new ArrayList<>();
+
+        arrayList = new ArrayList<>();
+
+        databasedoctruyen = new databasedoctruyen(this);
+
+        Cursor cursor = databasedoctruyen.getData2();
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String tentruyen = cursor.getString(1);
+            String noidung = cursor.getString(2);
+            String anh = cursor.getString(3);
+            int id_tk = cursor.getInt(4);
+
+            TruyenArrayList.add(new Truyen(id,tentruyen,noidung,anh,id_tk));
+
+            arrayList.add(new Truyen(id,tentruyen,noidung,anh,id_tk));
+
+            adapterTruyen = new adapterTruyen(getApplicationContext(),TruyenArrayList);
+
+            listView.setAdapter(adapterTruyen);
+        }
+        cursor.moveToFirst();
+        cursor.close();
+
     }
 }

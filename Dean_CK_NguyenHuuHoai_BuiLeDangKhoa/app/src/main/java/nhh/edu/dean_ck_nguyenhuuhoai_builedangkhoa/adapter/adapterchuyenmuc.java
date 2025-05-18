@@ -34,50 +34,27 @@ public class adapterchuyenmuc extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return chuyenmucList.get(position);
+        return null;
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(layout,null);
 
-        if (convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
-            holder = new ViewHolder();
-            holder.img = convertView.findViewById(R.id.imgchuyenmuc);
-            holder.txt = convertView.findViewById(R.id.textviewTenchuyenmuc);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+        ImageView img = (ImageView) convertView.findViewById(R.id.imgchuyenmuc);
+        TextView txt = (TextView) convertView.findViewById(R.id.textviewTenchuyenmuc);
 
         chuyenmuc cm = chuyenmucList.get(position);
-        holder.txt.setText(cm.getTenchuyenmuc());
 
-        String hinhanh = cm.getHinhanhchuyenmuc();
-        if (hinhanh != null && !hinhanh.isEmpty()) {
-            holder.img.setVisibility(View.VISIBLE);
+        txt.setText(cm.getTenchyenmuc());
 
-            // Dùng Picasso để tải ảnh từ URL
-            Picasso.get()
-                    .load(hinhanh)
-                    .into(holder.img);
-        } else {
-            holder.img.setVisibility(View.GONE);
-        }
-
-
+        Picasso.get().load(cm.getHinhanhchuyenmuc()).placeholder(R.drawable.ic_load).error(R.drawable.ic_image).into(img);
         return convertView;
-    }
-
-    static class ViewHolder {
-        ImageView img;
-        TextView txt;
     }
 }

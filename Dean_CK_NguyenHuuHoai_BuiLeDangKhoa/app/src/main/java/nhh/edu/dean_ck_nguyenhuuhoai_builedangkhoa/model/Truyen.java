@@ -2,64 +2,64 @@ package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model;
 
 public class Truyen {
 
-    // Các trường dữ liệu sẽ được lưu trong Realtime Database
-    private String tenTruyen;
-    private String noiDung;
-    private String anh;
-    private String idTaiKhoan;
+    private int ID;
+    private String TenTruyen;
+    private String NoiDung;
+    private String Anh;
+    private int ID_TK;
 
-    // Trường này KHÔNG lưu trong database — chỉ dùng để giữ key (ID) của node nếu cần
-    private transient String ID;
-
-    // Bắt buộc có constructor rỗng để Firebase đọc dữ liệu
-    public Truyen() {}
-
-    public Truyen(String tenTruyen, String noiDung, String anh, String idTaiKhoan) {
-        this.tenTruyen = tenTruyen;
-        this.noiDung = noiDung;
-        this.anh = anh;
-        this.idTaiKhoan = idTaiKhoan;
+    public Truyen(String tenTruyen, String noiDung, String anh, int ID_TK) {
+        TenTruyen = tenTruyen;
+        NoiDung = noiDung;
+        Anh = anh;
+        this.ID_TK = ID_TK;
     }
 
-    // Getter & Setter
-    public String getTenTruyen() {
-        return tenTruyen;
+    public Truyen(int ID, String tenTruyen, String noiDung, String anh, int ID_TK) {
+        this.ID = ID;
+        TenTruyen = tenTruyen;
+        NoiDung = noiDung;
+        Anh = anh;
+        this.ID_TK = ID_TK;
     }
 
-    public void setTenTruyen(String tenTruyen) {
-        this.tenTruyen = tenTruyen;
-    }
-
-    public String getNoiDung() {
-        return noiDung;
-    }
-
-    public void setNoiDung(String noiDung) {
-        this.noiDung = noiDung;
-    }
-
-    public String getAnh() {
-        return anh;
-    }
-
-    public void setAnh(String anh) {
-        this.anh = anh;
-    }
-
-    public String getIdTaiKhoan() {
-        return idTaiKhoan;
-    }
-
-    public void setIdTaiKhoan(String idTaiKhoan) {
-        this.idTaiKhoan = idTaiKhoan;
-    }
-
-    // ID là key của node, không được Firebase lưu nên đánh dấu là transient
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public String getTenTruyen() {
+        return TenTruyen;
+    }
+
+    public void setTenTruyen(String tenTruyen) {
+        TenTruyen = tenTruyen;
+    }
+
+    public String getNoiDung() {
+        return NoiDung;
+    }
+
+    public void setNoiDung(String noiDung) {
+        NoiDung = noiDung;
+    }
+
+    public String getAnh() {
+        return Anh;
+    }
+
+    public void setAnh(String anh) {
+        Anh = anh;
+    }
+
+    public int getID_TK() {
+        return ID_TK;
+    }
+
+    public void setID_TK(int ID_TK) {
+        this.ID_TK = ID_TK;
     }
 }
