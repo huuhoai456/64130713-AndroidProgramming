@@ -16,7 +16,6 @@ public class adapterthongtin extends BaseAdapter {
 
     private Context context;
     private int layout;
-
     private List<TaiKhoan> taiKhoanList;
 
     public adapterthongtin(Context context, int layout, List<TaiKhoan> taiKhoanList) {
@@ -32,26 +31,28 @@ public class adapterthongtin extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return taiKhoanList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position; // có thể trả position hoặc 0
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(layout,null);
+        if (convertView == null) {
+            convertView = inflater.inflate(layout, null);
+        }
 
-        TextView txtTenTaiKhoan = (TextView) convertView.findViewById(R.id.TEXT_NAME);
-        TextView txtEmail = (TextView) convertView.findViewById(R.id.TeXT_Gmail);
+        TextView txtTenTaiKhoan = convertView.findViewById(R.id.TEXT_NAME);
+        TextView txtEmail = convertView.findViewById(R.id.TeXT_Gmail);
 
         TaiKhoan taiKhoan = taiKhoanList.get(position);
 
-        txtTenTaiKhoan.setText(taiKhoan.getmTenTaiKhoan());
-        txtEmail.setText(taiKhoan.getmEmail());
+        txtTenTaiKhoan.setText(taiKhoan.getTenTaiKhoan()); // sửa tên getter
+        txtEmail.setText(taiKhoan.getEmail()); // sửa tên getter
 
         return convertView;
     }

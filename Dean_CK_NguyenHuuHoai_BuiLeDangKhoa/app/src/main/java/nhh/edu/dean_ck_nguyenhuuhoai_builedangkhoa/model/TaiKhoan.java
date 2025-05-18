@@ -1,63 +1,56 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model;
 
 public class TaiKhoan {
-    //Các biến
-    private int mId;
-    private String mTenTaiKhoan;
-    private String mMatkhau;
-    private String mEmail;
-    private int mPhanQuyen;
+    private String tenTaiKhoan;
+    private String matKhau;
+    private String email;
+    private int phanQuyen;
 
-    //Hàm khởi tạo
-    public TaiKhoan(String mTenTaiKhoan, String mMatkhau, String mEmail, int mPhanQuyen) {
-        this.mTenTaiKhoan = mTenTaiKhoan;
-        this.mMatkhau = mMatkhau;
-        this.mEmail = mEmail;
-        this.mPhanQuyen = mPhanQuyen;
+    // Bắt buộc có constructor rỗng để Firebase đọc dữ liệu
+    public TaiKhoan() {}
+
+    public TaiKhoan(String tenTaiKhoan, String matKhau, String email, int phanQuyen) {
+        this.tenTaiKhoan = tenTaiKhoan;
+        this.matKhau = matKhau;
+        this.email = email;
+        this.phanQuyen = phanQuyen;
     }
 
-    public TaiKhoan(String mTenTaiKhoan, String mEmail) {
-        this.mTenTaiKhoan = mTenTaiKhoan;
-        this.mEmail = mEmail;
-    }
-    //Các getter và setter
-    public int getmId() {
-        return mId;
+    public TaiKhoan(String tenTaiKhoan, String email) {
+        this.tenTaiKhoan = tenTaiKhoan;
+        this.email = email;
     }
 
-    public void setmId(int mId) {
-        this.mId = mId;
+    // Getters & Setters
+    public String getTenTaiKhoan() {
+        return tenTaiKhoan;
     }
 
-    public String getmTenTaiKhoan() {
-        return mTenTaiKhoan;
+    public void setTenTaiKhoan(String tenTaiKhoan) {
+        this.tenTaiKhoan = tenTaiKhoan;
     }
 
-    public void setmTenTaiKhoan(String mTenTaiKhoan) {
-        this.mTenTaiKhoan = mTenTaiKhoan;
+    public String getMatKhau() {
+        return matKhau;
     }
 
-    public String getmMatkhau() {
-        return mMatkhau;
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
     }
 
-    public void setmMatkhau(String mMatkhau) {
-        this.mMatkhau = mMatkhau;
+    public String getEmail() {
+        return email;
     }
 
-    public String getmEmail() {
-        return mEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setmEmail(String mEmail) {
-        this.mEmail = mEmail;
+    public int getPhanQuyen() {
+        return phanQuyen;
     }
 
-    public int getmPhanQuyen() {
-        return mPhanQuyen;
-    }
-
-    public void setmPhanQuyen(int mPhanQuyen) {
-        this.mPhanQuyen = mPhanQuyen;
+    public void setPhanQuyen(int phanQuyen) {
+        this.phanQuyen = phanQuyen;
     }
 }

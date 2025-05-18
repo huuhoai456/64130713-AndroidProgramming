@@ -34,27 +34,50 @@ public class adapterchuyenmuc extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return chuyenmucList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(layout,null);
+        ViewHolder holder;
 
-        ImageView img = (ImageView) convertView.findViewById(R.id.imgchuyenmuc);
-        TextView txt = (TextView) convertView.findViewById(R.id.textviewTenchuyenmuc);
+        if (convertView == null){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(layout, null);
+            holder = new ViewHolder();
+            holder.img = convertView.findViewById(R.id.imgchuyenmuc);
+            holder.txt = convertView.findViewById(R.id.textviewTenchuyenmuc);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         chuyenmuc cm = chuyenmucList.get(position);
+        holder.txt.setText(cm.getTenchuyenmuc());
 
-        txt.setText(cm.getTenchyenmuc());
+        String hinhanh = cm.getHinhanhchuyenmuc();
+        if (hinhanh != null && !hinhanh.isEmpty()) {
+            holder.img.setVisibility(View.VISIBLE);
 
-        Picasso.get().load(cm.getHinhanhchuyenmuc()).placeholder(R.drawable.ic_load).error(R.drawable.ic_image).into(img);
+            // Dùng Picasso để tải ảnh từ URL
+            Picasso.get()
+                    .load(hinhanh)
+                    .into(holder.img);
+        } else {
+            holder.img.setVisibility(View.GONE);
+        }
+
+
         return convertView;
+    }
+
+    static class ViewHolder {
+        ImageView img;
+        TextView txt;
     }
 }

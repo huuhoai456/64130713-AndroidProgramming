@@ -2,26 +2,21 @@ package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.Truyen;
 
 public class ManDangBai extends AppCompatActivity {
 
-    EditText edtTenTruyen,edtNoiDung,edtAnh;
+    EditText edtTenTruyen, edtNoiDung, edtAnh;
     Button btnDangBai;
-    databasedoctruyen databasedoctruyen;
-
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,47 +28,35 @@ public class ManDangBai extends AppCompatActivity {
         edtNoiDung = findViewById(R.id.dbnoidung);
         btnDangBai = findViewById(R.id.dbdangbai);
 
-        databasedoctruyen = new databasedoctruyen(this);
-        //button đăng bài
-        btnDangBai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        db = FirebaseFirestore.getInstance();
 
-                String tentruyen = edtTenTruyen.getText().toString();
-                String noidung = edtNoiDung.getText().toString();
-                String img = edtAnh.getText().toString();
-                
-                Truyen truyen = CreateTruyen();
-                
-                if (tentruyen.equals("") || noidung.equals("") || img.equals("")){
-                    Toast.makeText(ManDangBai.this, "Yêu cầu nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                    Log.e("ERR :"," Nhập đầy đủ thông tin");
-                }
-                //Nếu nhập đầy đủ thông tin thì thực hiện thêm dữ liệu
-                else {
-                    databasedoctruyen.AddTruyen(truyen);
-                    //Chuyển qua màn hình admin và cập nhật lại dữ liệu
-                    Intent intent = new Intent(ManDangBai.this,ManAdmin.class);
-                    finish();
-                    startActivity(intent);
-                }
+        btnDangBai.setOnClickListener(v -> {
+            String tentruyen = edtTenTruyen.getText().toString().trim();
+            String noidung = edtNoiDung.getText().toString().trim();
+            String img = edtAnh.getText().toString().trim();
+
+            if (tentruyen.isEmpty() || noidung.isEmpty() || img.isEmpty()) {
+                Toast.makeText(ManDangBai.this, "Yêu cầu nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            String rawUid = getIntent().getStringExtra("uid");
+            final String uid = (rawUid != null) ? rawUid : "unknown";
+
+            Truyen truyen = new Truyen(tentruyen, noidung, img, uid);
+
+            db.collection("Truyen")
+                    .add(truyen)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(ManDangBai.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ManDangBai.this, ManAdmin.class);
+                        intent.putExtra("uid", uid);
+                        finish();
+                        startActivity(intent);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(ManDangBai.this, "Đăng bài thất bại", Toast.LENGTH_SHORT).show();
+                    });
         });
-
-
-    }
-    private Truyen CreateTruyen(){
-
-        String tentruyen = edtTenTruyen.getText().toString();
-        String noidung = edtNoiDung.getText().toString();
-        String img = edtAnh.getText().toString();
-
-        Intent intent= getIntent();
-
-        int id = intent.getIntExtra("Id",0);
-
-        Truyen truyen = new Truyen(tentruyen,noidung,img,id);
-        return truyen;
-
     }
 }

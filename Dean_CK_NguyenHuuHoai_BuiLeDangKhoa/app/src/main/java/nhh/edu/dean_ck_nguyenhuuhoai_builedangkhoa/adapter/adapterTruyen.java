@@ -39,33 +39,45 @@ public class adapterTruyen extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
     //filter
     public void filterList(ArrayList<Truyen> filteredList) {
         listTruyen = filteredList;
         notifyDataSetChanged();
     }
 
-    public class ViewHolder{
+    private static class ViewHolder {
         TextView txtTenTruyen;
         ImageView imgtruyen;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder = null;
-        viewHolder = new ViewHolder();
+        ViewHolder viewHolder;
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.newtruyen,null);
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.newtruyen, parent, false);
 
-        viewHolder.txtTenTruyen = convertView.findViewById(R.id.textviewTentruyenNew);
-        viewHolder.imgtruyen = convertView.findViewById(R.id.imgNewTruyen);
-        convertView.setTag(viewHolder);
+            viewHolder = new ViewHolder();
+            viewHolder.txtTenTruyen = convertView.findViewById(R.id.textviewTentruyenNew);
+            viewHolder.imgtruyen = convertView.findViewById(R.id.imgNewTruyen);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
         Truyen truyen = (Truyen) getItem(position);
         viewHolder.txtTenTruyen.setText(truyen.getTenTruyen());
 
-        Picasso.get().load(truyen.getAnh()).placeholder(R.drawable.ic_load).error(R.drawable.ic_image).into(viewHolder.imgtruyen);
+        Picasso.get()
+                .load(truyen.getAnh())
+                .placeholder(R.drawable.ic_load)
+                .error(R.drawable.ic_image)
+                .into(viewHolder.imgtruyen);
+
         return convertView;
     }
 }

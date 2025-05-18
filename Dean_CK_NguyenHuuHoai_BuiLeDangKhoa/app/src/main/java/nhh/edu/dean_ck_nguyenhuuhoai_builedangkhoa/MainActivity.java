@@ -1,10 +1,7 @@
 package nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,21 +10,23 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,197 +34,194 @@ import java.util.ArrayList;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterTruyen;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterchuyenmuc;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.adapter.adapterthongtin;
-import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.database.databasedoctruyen;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.TaiKhoan;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.Truyen;
 import nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa.model.chuyenmuc;
 
 public class MainActivity extends AppCompatActivity {
+
     Toolbar toolbar;
     ViewFlipper viewFlipper;
     NavigationView navigationView;
-    ListView listView,listViewNew,listViewThongTin;
+    ListView listView, listViewNew, listViewThongTin;
     DrawerLayout drawerLayout;
 
-    String email;
-    String tentaikhoan;
     ArrayList<Truyen> TruyenArraylist;
-
-    adapterTruyen adapterTruyen;
     ArrayList<chuyenmuc> chuyenmucArrayList;
     ArrayList<TaiKhoan> taiKhoanArrayList;
-    databasedoctruyen databasedoctruyen;
+
+    adapterTruyen adapterTruyen;
     adapterchuyenmuc adapterchuyenmuc;
     adapterthongtin adapterthongtin;
+
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference taiKhoanRef, truyenRef;
+
+    private int phanQuyen = 1;
+    private String uid;
+    private String email;
+    private String tentaikhoan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        databasedoctruyen = new databasedoctruyen(this);
-        //Nhận dũ liệu ở màn đăng nhập gửi
-        Intent intentpq = getIntent();
-        int i = intentpq.getIntExtra("phanq",0);
-        int idd = intentpq.getIntExtra("idd",0);
-        email = intentpq.getStringExtra("email");
-        tentaikhoan = intentpq.getStringExtra("tentaikhoan");
+        mAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "Không tìm thấy người dùng", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        uid = user.getUid();
 
         AnhXa();
         ActionBar();
         ActionViewFlipper();
 
-        listViewNew.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, ManNoiDung.class);
+        taiKhoanRef = firebaseDatabase.getReference("TaiKhoan").child(uid);
+        truyenRef = firebaseDatabase.getReference("Truyen");
 
-                String tent = TruyenArraylist.get(position).getTenTruyen();
-                String noidungt = TruyenArraylist.get(position).getNoiDung();
-                intent.putExtra("tentruyen",tent);
-                intent.putExtra("noidung",noidungt);
-                startActivity(intent);
+        // Lấy thông tin tài khoản từ Realtime Database
+        taiKhoanRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    TaiKhoan taiKhoan = snapshot.getValue(TaiKhoan.class);
+                    if (taiKhoan != null) {
+                        tentaikhoan = taiKhoan.getTenTaiKhoan();
+                        email = taiKhoan.getEmail();
+                        phanQuyen = taiKhoan.getPhanQuyen();
+
+                        taiKhoanArrayList.add(new TaiKhoan(tentaikhoan, email));
+                        adapterthongtin.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Lỗi tải thông tin tài khoản", Toast.LENGTH_SHORT).show();
             }
         });
 
-        //Bắt click item cho listview
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Lấy danh sách truyện từ Realtime Database
+        truyenRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Đăng bài
-                if (position == 0){
-                    if (i == 2){
-                        Intent intent = new Intent(MainActivity.this, ManAdmin.class);
-                        //Gửi id tài khoản qua màn admin
-                        intent.putExtra("Id",idd);
-                        startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this,"Bạn không có quyền đăng bài", Toast.LENGTH_SHORT).show();
-                        Log.e("Đăng bài : ","Bạn không có quyền");
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                TruyenArraylist.clear();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Truyen truyen = data.getValue(Truyen.class);
+                    if (truyen != null) {
+                        TruyenArraylist.add(truyen);
                     }
                 }
-                //Nếu vị trí ấn vào là thông tin thì sẽ chuyển qua màn hình thông tin app
-                else if (position == 1){
-                    Intent intent = new Intent(MainActivity.this, ManThongTin.class);
+                adapterTruyen.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Lỗi tải truyện", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        listViewNew.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(MainActivity.this, ManNoiDung.class);
+            Truyen truyen = TruyenArraylist.get(position);
+            intent.putExtra("tentruyen", truyen.getTenTruyen());
+            intent.putExtra("noidung", truyen.getNoiDung());
+            startActivity(intent);
+        });
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (position == 0) {
+                if (phanQuyen == 2) {
+                    Intent intent = new Intent(MainActivity.this, ManAdmin.class);
+                    intent.putExtra("uid", uid);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "Bạn không có quyền đăng bài", Toast.LENGTH_SHORT).show();
                 }
-                //Đăng xuất
-                else if (position == 2){
-                    finish();
-                }
+            } else if (position == 1) {
+                startActivity(new Intent(MainActivity.this, ManThongTin.class));
+            } else if (position == 2) {
+                mAuth.signOut();
+                finish();
             }
         });
     }
-    //Thanh actionbar với toolbar
+
     private void ActionBar() {
-        //Hàm hỗ trợ toolbar
         setSupportActionBar(toolbar);
-        //set nút cho actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //Tạo icon cho toolbar
         toolbar.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
-        //Thêm sự kiện click
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
+        toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
     }
 
-    //Phương thức cho chạy quảng cáo với ViewFlipper
     private void ActionViewFlipper() {
-        //mảng chứa tấm ảnh cho quảng cáo
         ArrayList<String> mangquangcao = new ArrayList<>();
-        //Add ảnh vào mảng
         mangquangcao.add("https://toplist.vn/images/800px/rua-va-tho-230179.jpg");
         mangquangcao.add("https://toplist.vn/images/800px/deo-chuong-cho-meo-230180.jpg");
         mangquangcao.add("https://toplist.vn/images/800px/cu-cai-trang-230181.jpg");
         mangquangcao.add("https://toplist.vn/images/800px/de-den-va-de-trang-230182.jpg");
 
-        //Thực hiện vòng lặp for gán ảnh vào ImageView , rồi từ imgview lên app
-        for (int i =0; i<mangquangcao.size();i++){
-            ImageView imageView = new ImageView((getApplicationContext()));
-            //Sử dụng hàm thư viện
-            Picasso.get().load(mangquangcao.get(i)).into(imageView);
-            //phương thức chỉnh tấm hình vào khung quảng cáo
+        for (String link : mangquangcao) {
+            ImageView imageView = new ImageView(getApplicationContext());
+            Picasso.get().load(link).into(imageView);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
-            //Thêm ảnh từ imageview vào ViewFlipper
             viewFlipper.addView(imageView);
         }
-        //Thiết lập tự động chạy cho viewFlipper chạy trong 4 giây
+
         viewFlipper.setFlipInterval(4000);
-        //run auto viewFlipper
         viewFlipper.setAutoStart(true);
-        //Gọi Animation cho vào và ra
-        Animation animation_slide_in = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_in_right);
-        Animation animation_slide_out = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_out_right);
-        //Gọi Animation vào Flipper
-        viewFlipper.setInAnimation(animation_slide_in);
-        viewFlipper.setInAnimation(animation_slide_out);
+
+        Animation animationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_right);
+        Animation animationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
+        viewFlipper.setInAnimation(animationIn);
+        viewFlipper.setOutAnimation(animationOut);
     }
 
     private void AnhXa() {
         toolbar = findViewById(R.id.toolbarmanhinhchinh);
         viewFlipper = findViewById(R.id.viewflipper);
-        listViewNew= findViewById(R.id.listviewNew);
+        listViewNew = findViewById(R.id.listviewNew);
         listView = findViewById(R.id.listviewmanhinhchinh);
         listViewThongTin = findViewById(R.id.listviewthongtin);
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerlayout);
 
         TruyenArraylist = new ArrayList<>();
+        adapterTruyen = new adapterTruyen(getApplicationContext(), TruyenArraylist);
+        listViewNew.setAdapter(adapterTruyen);
 
-        Cursor cursor1 = databasedoctruyen.getData1();
-        while (cursor1.moveToNext()){
-
-            int id = cursor1.getInt(0);
-            String tentruyen = cursor1.getString(1);
-            String noidung = cursor1.getString(2);
-            String anh = cursor1.getString(3);
-            int id_tk = cursor1.getInt(4);
-
-            TruyenArraylist.add(new Truyen(id,tentruyen,noidung,anh,id_tk));
-
-            adapterTruyen = new adapterTruyen(getApplicationContext(),TruyenArraylist);
-            listViewNew.setAdapter(adapterTruyen);
-        }
-        cursor1.moveToFirst();
-        cursor1.close();
-
-        //Thông tin
         taiKhoanArrayList = new ArrayList<>();
-        taiKhoanArrayList.add(new TaiKhoan(tentaikhoan,email));
-
-        adapterthongtin = new adapterthongtin(this,R.layout.navigation_thongtin,taiKhoanArrayList);
+        adapterthongtin = new adapterthongtin(this, R.layout.navigation_thongtin, taiKhoanArrayList);
         listViewThongTin.setAdapter(adapterthongtin);
 
-        //chuyên mục
         chuyenmucArrayList = new ArrayList<>();
-        chuyenmucArrayList.add(new chuyenmuc("Đăng bài",R.drawable.ic_baseline_post_add_24dp));
-        chuyenmucArrayList.add(new chuyenmuc("Thông tin",R.drawable.ic_baseline_face_24dp));
-        chuyenmucArrayList.add(new chuyenmuc("Đăng xuất",R.drawable.ic_baseline_login_24dp));
+        chuyenmucArrayList.add(new chuyenmuc("Đăng bài", "https://png.pngtree.com/png-vector/20190806/ourlarge/pngtree-pencil-write-text-school-flat-color-icon-vector-icon-png-image_1651242.jpg"));
+        chuyenmucArrayList.add(new chuyenmuc("Thông tin", "https://png.pngtree.com/png-clipart/20190705/original/pngtree-info-vector-icon-png-image_4279574.jpg"));
+        chuyenmucArrayList.add(new chuyenmuc("Đăng xuất", "https://static.vecteezy.com/system/resources/previews/000/423/979/original/sign-in-icon-vector-illustration.jpg"));
 
-        adapterchuyenmuc = new adapterchuyenmuc(this,R.layout.chuyenmuc,chuyenmucArrayList);
+        adapterchuyenmuc = new adapterchuyenmuc(this, R.layout.chuyenmuc, chuyenmucArrayList);
         listView.setAdapter(adapterchuyenmuc);
-
     }
-    //Nạp 1 menu tìm kiếm vào ActionBar
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.mymenu,menu);
+        getMenuInflater().inflate(R.menu.mymenu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Nếu click vào icon tìm kiếm thì sẽ chuyển sang màn hình tìm kiếm
         if (item.getItemId() == R.id.menu1) {
-            Intent intent = new Intent(MainActivity.this, ManTimKiem.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, ManTimKiem.class));
         }
         return super.onOptionsItemSelected(item);
     }

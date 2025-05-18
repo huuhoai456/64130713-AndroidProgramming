@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "587156591050",
+    "project_id": "dean-ck-database",
+    "storage_bucket": "dean-ck-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587156591050:android:57108035bde826ef5b7f33",
+        "android_client_info": {
+          "package_name": "nhh.edu.dean_ck_nguyenhuuhoai_builedangkhoa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhbT9fPvgtJFEo4KazhvUtrOrvGbrXFdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
